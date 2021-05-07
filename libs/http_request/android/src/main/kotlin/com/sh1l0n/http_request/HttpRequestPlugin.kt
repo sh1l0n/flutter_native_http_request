@@ -1,6 +1,7 @@
 package com.sh1l0n.http_request
 
 import androidx.annotation.NonNull
+import com.android.volley.toolbox.Volley
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -32,5 +33,9 @@ class HttpRequestPlugin: FlutterPlugin, MethodCallHandler {
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
     channel.setMethodCallHandler(null)
+  }
+
+  private fun sendRequest() {
+
   }
 }
