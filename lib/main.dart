@@ -4,6 +4,11 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
 
+//https://pub.dev/packages/weather_widget
+
+// ##Developing native pkg:
+// https://github.com/flutter/flutter/issues/19830
+// For running comment the flutter.jar import in build.gradle, but for editing be sure that its uncommented
 void main() {
   runApp(MyApp());
 }
@@ -27,7 +32,12 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await HttpRequest.platformVersion;
+      // platformVersion = await HttpRequest.platformVersion;
+      platformVersion = await HttpRequest.get(
+        'api.openweathermap.org/data/2.5/weather',
+        headers: {'hola': 'hola'},
+        params: {'q': 'London', 'apikey': ''},
+      );
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
