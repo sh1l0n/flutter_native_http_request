@@ -6,11 +6,14 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
 
+// ##DOC:
 //https://pub.dev/packages/weather_widget
-
 // ##Developing native pkg:
 // https://github.com/flutter/flutter/issues/19830
 // For running comment the flutter.jar import in build.gradle, but for editing be sure that its uncommented
+
+
+
 void main() {
   runApp(MyApp());
 }
@@ -47,15 +50,6 @@ class _MyAppState extends State<MyApp> {
       print('RESPONSE HTTP: $x');
     } on PlatformException {
     }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
