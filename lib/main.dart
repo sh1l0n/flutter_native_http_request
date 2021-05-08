@@ -5,6 +5,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
+import 'package:lib_location/location.dart';
+// import 'package:lib_location/location.dart';
 
 // ##DOC:
 //https://pub.dev/packages/weather_widget
@@ -61,6 +63,26 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: Text('Running on: $_platformVersion\n'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+
+            LocationManager().requestLocationPermission().then((value) {
+              print('requestLocationPermission: $value');
+              if (!value) {
+                return;
+              }
+              LocationManager().requestLocationToggleOn().then((value) {
+                print('requestLocationToggleOn: $value');
+                if (!value) {
+                  return;
+                }
+                LocationManager().requestCurrentLocation().then((value) {
+                  print('latitude: ${value?.latitude} longitude: ${value?.longitude}');
+                });
+              });
+            });
+          },
         ),
       ),
     );
