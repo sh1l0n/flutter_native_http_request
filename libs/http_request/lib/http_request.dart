@@ -7,13 +7,8 @@ class HttpRequest {
   static const MethodChannel _channel =
       const MethodChannel('http_request');
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
-
   static Future<String> get(final String url, {final Map<String, String> headers, final Map<String, String> params}) async {
-    final result = await _channel.invokeMethod('sendRequest', {
+    final result = await _channel.invokeMethod('get', {
       "url": url,
       "headers": headers,
       "params": params,

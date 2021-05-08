@@ -33,11 +33,11 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       // platformVersion = await HttpRequest.platformVersion;
-      platformVersion = await HttpRequest.get(
-        'api.openweathermap.org/data/2.5/weather',
-        headers: {'hola': 'hola'},
-        params: {'q': 'London', 'apikey': ''},
+      final x = await HttpRequest.get(
+        'https://api.openweathermap.org/data/2.5/weather',
+        params: {'q': 'Alicante, Spain', 'apikey': ''},
       );
+      print('RESPONSE HTTP: $x');
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
