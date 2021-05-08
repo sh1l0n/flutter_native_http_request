@@ -6,48 +6,73 @@ class LocationInfo {
   const LocationInfo(this.latitude, this.longitude);
   final double latitude;
   final double longitude;
+
+  Map<String, dynamic> toJson() => {
+    'latitude': latitude,
+    'longitude': longitude,
+  };
+
+  @override
+  String toString() => toJson().toString();
+}
+
+enum LocationPermissionStatus {
+  deniedForever,
+  denied,
+  granted,
+  grantedLimited,
+}
+
+class LocationPermissionStatusHelper {
+  static bool isDenied(final LocationPermissionStatus status) => status == LocationPermissionStatus.denied || status == LocationPermissionStatus.deniedForever;
+  static bool isDeniedForever(final LocationPermissionStatus status) => status == LocationPermissionStatus.deniedForever;
+  static bool isGranted(final LocationPermissionStatus status) => status == LocationPermissionStatus.granted || status == LocationPermissionStatus.grantedLimited;
 }
 
 class LocationManager {
 
   Location get _location => Location();
 
-  Future<bool> requestLocationPermission() async {
-    PermissionStatus permissionGranted = await _location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      try {
-        permissionGranted = await _location.requestPermission();
-        if (permissionGranted == PermissionStatus.granted || permissionGranted == PermissionStatus.grantedLimited) {
-          return true;
-        }
-      } catch (e) {
-        return false;
-      }
-    } else {
-      permissionGranted = await _location.hasPermission();
-      if (permissionGranted == PermissionStatus.denied) {
-        return false;
-      } else {
-        return true;
-      }
+  LocationPermissionStatus _fromPermissionStatus(final PermissionStatus status) {
+    switch(status) {
+      case PermissionStatus.denied:
+        return LocationPermissionStatus.denied;
+      case PermissionStatus.deniedForever:
+        return LocationPermissionStatus.deniedForever;
+      case PermissionStatus.granted:
+        return LocationPermissionStatus.granted;
+      case PermissionStatus.grantedLimited:
+        return LocationPermissionStatus.grantedLimited;
+      default:
+        return LocationPermissionStatus.denied;
     }
+  }
 
-    return false;
+  Future<LocationPermissionStatus> _locationPermissionStatus() async {
+    return _fromPermissionStatus( await _location.hasPermission());
+  }
+
+  Future<LocationPermissionStatus> requestLocationPermission() async {
+    var status = await _locationPermissionStatus();
+    if (LocationPermissionStatusHelper.isDeniedForever(status)) {
+      return status;
+
+    } else if (LocationPermissionStatusHelper.isDenied(status)) {
+      try {
+        status = _fromPermissionStatus(await _location.requestPermission());
+      } catch (_) {}
+    }
+    return status;
   }
 
   Future<bool> requestLocationToggleOn() async {
-    bool serviceEnabled = await _location.serviceEnabled();
-    if (!serviceEnabled) {
+    var gpsEnabled = await _location.serviceEnabled();
+    if (!gpsEnabled) {
       try {
-        serviceEnabled = await _location.requestService();
-        if (!serviceEnabled) {
-          return false;
-        }
-      } catch(e) {
-        return false;
-      }
+        gpsEnabled = await _location.requestService();
+      } catch(_) {}
     }
-    return true;
+    return gpsEnabled;
   }
 
   Future<LocationInfo?> requestCurrentLocation() async {
