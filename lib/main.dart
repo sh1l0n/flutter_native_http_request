@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -27,19 +29,23 @@ class _MyAppState extends State<MyApp> {
     initPlatformState();
   }
 
+  Future<String> getApiKey() async {
+    final jsonData = await rootBundle.loadString('assets/env.json');
+    final jsonResult = json.decode(jsonData);
+    final secret = jsonResult['api_key'];
+    return secret;
+  }
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      // platformVersion = await HttpRequest.platformVersion;
+      final apiKey = await getApiKey();
       final x = await HttpRequest.get(
         'https://api.openweathermap.org/data/2.5/weather',
-        params: {'q': 'Alicante, Spain', 'apikey': ''},
+        params: {'q': 'Alicante, Spain', 'apikey': apiKey},
       );
       print('RESPONSE HTTP: $x');
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
     }
 
     // If the widget was removed from the tree while the asynchronous platform
