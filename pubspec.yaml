@@ -18,6 +18,7 @@ dependencies:
   lib_location:
     path: ./libs/lib_location
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -38,11 +38,14 @@ class WeatherScreen extends StatelessWidget {
       body: Center(
         child: FloatingActionButton(
           onPressed: () {
-            print('onpressed');
-            bloc.checkLocation().then((value) {
-              print(value);
+            bloc.requestCurrentLocation().then((value) {
               if (value!=null) {
-                print(bloc.getWeatherCurrentLocation(value));
+                bloc.getWeatherFromAddress('Alicante').then((value) {
+                  print(value);
+                });
+                bloc.getWeatherCurrentLocation().then((value) {
+                  print(value);
+                });
               }
             });
           },

@@ -1,19 +1,30 @@
 
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 
-class LocationInfo {
-  const LocationInfo(this.latitude, this.longitude);
+class CityInfo {
+  const CityInfo(this.postalCode, this.locality, this.subAdministrativeArea, this.country, this.isoCountryCode, this.latitude, this.longitude);
+  final String? postalCode;
+  final String? locality;
+  final String? subAdministrativeArea;
+  final String? country;
+  final String? isoCountryCode;
   final double latitude;
   final double longitude;
 
+  @override
+  String toString() => toJson().toString();
+
   Map<String, dynamic> toJson() => {
+    'postalCode': postalCode,
+    'locality': locality,
+    'subAdministrativeArea': subAdministrativeArea,
+    'country': country,
+    'isoCountryCode': isoCountryCode,
     'latitude': latitude,
     'longitude': longitude,
   };
-
-  @override
-  String toString() => toJson().toString();
 }
 
 enum LocationPermissionStatus {
@@ -75,14 +86,30 @@ class LocationManager {
     return gpsEnabled;
   }
 
-  static Future<LocationInfo?> requestCurrentLocation() async {
+  static Future<CityInfo?> requestCurrentLocation() async {
     try {
-      print('1');
       final locationData = await _location.getLocation();
-      print('3');
-      return LocationInfo(locationData.latitude ?? 0, locationData.longitude ?? 0);
+      return getCityFromCoordinates(locationData.latitude ?? 0, locationData.longitude ?? 0);
     } catch (e) {
       return null;
     }
+  }
+
+  static Future<CityInfo> getCityFromCoordinates(final double lat, final double lon) async {
+    final placemark = (await geocoding.placemarkFromCoordinates(lat, lon)).first;
+    return CityInfo(
+      placemark.postalCode, 
+      placemark.locality, 
+      placemark.subAdministrativeArea, 
+      placemark.country, 
+      placemark.isoCountryCode,
+      lat,
+      lon,
+    );
+  }
+
+  static Future<CityInfo> getCityFromAddress(final String address) async {
+    final location = (await geocoding.locationFromAddress(address)).first;
+    return getCityFromCoordinates(location.latitude, location.longitude);
   }
 }

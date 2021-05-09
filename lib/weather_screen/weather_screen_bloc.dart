@@ -4,6 +4,21 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
 import 'package:lib_location/location.dart';
+import 'package:native_wheater/weather_screen/weather_api.dart';
+
+class WeatherCityInfo {
+  const WeatherCityInfo(this.city, this.weather);
+  final CityInfo? city;
+  final OneCallResponse weather;  
+
+  @override
+  String toString() => toJson().toString();
+
+  Map<String, dynamic> toJson() => {
+    'city': city,
+    'weather': weather,
+  };
+}
 
 class WeatherScreenBLoC {
   StreamController<String> _messageToClientController = StreamController<String>.broadcast();
@@ -23,38 +38,52 @@ class WeatherScreenBLoC {
     }
   }
 
-  Future<void> getWeatherCurrentLocation(final LocationInfo location) async {
+  Future<WeatherCityInfo?> getWeatherFromAddress(final String address) async {
+    final city = await LocationManager.getCityFromAddress(address);
+    return _getWeatherIn(city);
+  }
+
+  Future<WeatherCityInfo?> getWeatherCurrentLocation() async {
+    final city = await requestCurrentLocation();
+    return city!=null ? await _getWeatherIn(city) : null;
+  }
+
+  Future<WeatherCityInfo?> _getWeatherIn(final CityInfo location) async {
     try {
       final apiKey = await _getApiKey();
+
       final x = await HttpRequest.get(
-        'https://api.openweathermap.org/data/2.5/weather',
-        params: {'lat': location.latitude.toString(), 'lon': location.longitude.toString(), 'apikey': apiKey},
+        'https://api.openweathermap.org/data/2.5/onecall',
+        params: {
+          'lat': location.latitude.toString(), 
+          'lon': location.longitude.toString(),
+          'apiKey': apiKey,
+          'units': 'metric',
+          'exclude': 'minutely,hourly',
+        },
       );
-      print('RESPONSE HTTP: $x');
-    } on PlatformException {
-    }
+
+      final Map<String, dynamic> data = jsonDecode(x);
+      if(!data.containsKey('error')) {
+        final oneCallResponse = OneCallResponse.fromJson(data);
+        final city = await LocationManager.getCityFromCoordinates(oneCallResponse.latitude, oneCallResponse.longitude);
+
+        return WeatherCityInfo(
+          city,
+          oneCallResponse,
+        );
+      }
+    } on PlatformException {}
+    _sendMessageToClient('Cannot retrive weather info for selected location');
+    return null;
   }
 
-  Future<void> getWeather() async {
-     try {
-      final apiKey = await _getApiKey();
-      final x = await HttpRequest.get(
-        'https://api.openweathermap.org/data/2.5/weather',
-        params: {'q': 'Alicante, Spain', 'apikey': apiKey},
-      );
-      print('RESPONSE HTTP: $x');
-    } on PlatformException {
-    }
-  }
-
-  Future<LocationInfo?> checkLocation() async {
+  Future<CityInfo?> requestCurrentLocation() async {
     final permissionStatus = await LocationManager.requestLocationPermission();
     if (LocationPermissionStatusHelper.isGranted(permissionStatus)) {
       final toggleOn = await LocationManager.requestLocationToggleOn();
       if (toggleOn) {
-        final x = await LocationManager.requestCurrentLocation();
-        print(x);
-        return x;
+        return await LocationManager.requestCurrentLocation();
       }
       _sendMessageToClient('GPS should be enabled in order to discover your position');
     } else if (LocationPermissionStatusHelper.isDeniedForever(permissionStatus)) {
