@@ -31,9 +31,9 @@ class LocationPermissionStatusHelper {
 
 class LocationManager {
 
-  Location get _location => Location();
+  static Location get _location => Location();
 
-  LocationPermissionStatus _fromPermissionStatus(final PermissionStatus status) {
+  static LocationPermissionStatus _fromPermissionStatus(final PermissionStatus status) {
     switch(status) {
       case PermissionStatus.denied:
         return LocationPermissionStatus.denied;
@@ -48,11 +48,11 @@ class LocationManager {
     }
   }
 
-  Future<LocationPermissionStatus> _locationPermissionStatus() async {
+  static Future<LocationPermissionStatus> _locationPermissionStatus() async {
     return _fromPermissionStatus( await _location.hasPermission());
   }
 
-  Future<LocationPermissionStatus> requestLocationPermission() async {
+  static Future<LocationPermissionStatus> requestLocationPermission() async {
     var status = await _locationPermissionStatus();
     if (LocationPermissionStatusHelper.isDeniedForever(status)) {
       return status;
@@ -65,7 +65,7 @@ class LocationManager {
     return status;
   }
 
-  Future<bool> requestLocationToggleOn() async {
+  static Future<bool> requestLocationToggleOn() async {
     var gpsEnabled = await _location.serviceEnabled();
     if (!gpsEnabled) {
       try {
@@ -75,9 +75,11 @@ class LocationManager {
     return gpsEnabled;
   }
 
-  Future<LocationInfo?> requestCurrentLocation() async {
+  static Future<LocationInfo?> requestCurrentLocation() async {
     try {
+      print('1');
       final locationData = await _location.getLocation();
+      print('3');
       return LocationInfo(locationData.latitude ?? 0, locationData.longitude ?? 0);
     } catch (e) {
       return null;

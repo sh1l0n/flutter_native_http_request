@@ -25,7 +25,7 @@ class NetworkRequest {
 
   private fun request(url: String?, method: String, headers: Map<String, String>?, params: Map<String, String>?): String {
     if (url == null || url.isEmpty()) {
-      return "{\"error\": \"Should specify an url\""
+      return "{\"error\": \"$-1\", \"message\":\"Should specify an url\"}"
     }
 
     lateinit var request: HttpURLConnection
@@ -51,21 +51,10 @@ class NetworkRequest {
       br.close()
       return sb.toString()
     } catch (e: MalformedURLException) {
-      return "{\"error\": \"Cannot perform http get request\"}"
+      return "{\"error\": \"$-2\", \"message\":\"$e\"}"
     } catch (e: IOException) {
-      var errMessage = ""
-      errMessage = when (request.responseCode) {
-        401 -> {
-          "Invalid API"
-        }
-        404 -> {
-          "City not found"
-        }
-        else -> {
-          "Cannot perform http get request"
-        }
-      }
-      return "{\"error\": \"$errMessage\"}"
+      val responseCode = request.responseCode
+      return "{\"error\": \"$responseCode\", \"message\":\"$e\"}"
     }
   }
 }
