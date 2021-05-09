@@ -5,13 +5,14 @@
 //
 
 class OneCallResponseEntry {
-  const OneCallResponseEntry(this.dt, this.temp, this.pressure, this.humidity, this.clouds, this.windSpeed, this.title, this.description, this.icon);
+  const OneCallResponseEntry(this.dt, this.temp, this.pressure, this.humidity, this.clouds, this.windSpeed, this.weatherId, this.title, this.description, this.icon);
   final int dt;
   final double temp;
   final int pressure;
   final int humidity;
   final int clouds;
   final double windSpeed;
+  final int weatherId;
   final String title;
   final String description;
   final String icon;
@@ -26,6 +27,7 @@ class OneCallResponseEntry {
     'humidity': humidity,
     'clouds': clouds,
     'wind_speed': windSpeed,
+    'weatherId': weatherId,
     'title': title,
     'description': description,
     'icon': icon
@@ -44,10 +46,11 @@ class OneCallResponseEntry {
     final clouds = data['clouds'] as int;
     final windSpeed = data['wind_speed'] as double;
     final weather = data['weather'] as List<dynamic>;
+    final weatherId = weather[0]['id'] as int;
     final title = weather[0]['main'] as String;
     final description = weather[0]['description'] as String;
     final icon = weather[0]['icon'] as String;
-    return OneCallResponseEntry(dt, temp, pressure, humidity, clouds, windSpeed, title, description, icon);
+    return OneCallResponseEntry(dt, temp, pressure, humidity, clouds, windSpeed, weatherId, title, description, icon);
   } 
 }
 
