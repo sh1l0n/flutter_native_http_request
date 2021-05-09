@@ -48,11 +48,18 @@ class WeatherScreenBLoC {
     return city!=null ? await _getWeatherIn(city) : null;
   }
 
+  Future<String> getIcon(final String icon) async {
+    final response = await HttpRequest.get(
+      'https://openweathermap.org/img/w/$icon.png'
+    );
+    return response;
+  }
+
   Future<WeatherCityInfo?> _getWeatherIn(final CityInfo location) async {
     try {
       final apiKey = await _getApiKey();
 
-      final x = await HttpRequest.get(
+      final response = await HttpRequest.get(
         'https://api.openweathermap.org/data/2.5/onecall',
         params: {
           'lat': location.latitude.toString(), 
@@ -63,7 +70,7 @@ class WeatherScreenBLoC {
         },
       );
 
-      final Map<String, dynamic> data = jsonDecode(x);
+      final Map<String, dynamic> data = jsonDecode(response);
       if(!data.containsKey('error')) {
         final oneCallResponse = OneCallResponse.fromJson(data);
         final city = await LocationManager.getCityFromCoordinates(oneCallResponse.latitude, oneCallResponse.longitude);
