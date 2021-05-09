@@ -1,3 +1,8 @@
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
 
 import 'package:flutter/material.dart';
 import 'weather_screen_bloc.dart';

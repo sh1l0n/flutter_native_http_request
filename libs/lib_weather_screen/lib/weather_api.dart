@@ -1,4 +1,8 @@
-
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
 
 class OneCallResponseEntry {
   const OneCallResponseEntry(this.dt, this.temp, this.pressure, this.humidity, this.clouds, this.windSpeed, this.title, this.description, this.icon);

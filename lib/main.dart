@@ -1,3 +1,10 @@
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
+
+
 import 'package:flutter/material.dart';
 
 import 'package:lib_weather_screen/weather_screen.dart';
@@ -19,19 +26,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: WeatherScreen(
         bloc: WeatherScreenBLoC(), 
-          style: WeatherScreenStyle(
-            snackBarStyle: SnackBarStyle(
-              textStyle: TextStyle(color: Color(0xffffffff)), 
-              color: Color(0xff424242)
-            )
-          ),
+        style: WeatherScreenStyle(
+          snackBarStyle: SnackBarStyle(
+            textStyle: TextStyle(
+              color: Color(0xffffffff),
+            ), 
+            color: Color(0xff424242),
+          )
         ),
-      );
+      ),
+    );
   }
 }

@@ -1,3 +1,9 @@
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
+
 import 'dart:async';
 import 'dart:convert';
 

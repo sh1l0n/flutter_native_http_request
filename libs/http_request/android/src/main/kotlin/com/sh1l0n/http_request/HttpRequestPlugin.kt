@@ -1,3 +1,9 @@
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
+
 package com.sh1l0n.http_request
 
 import androidx.annotation.NonNull
