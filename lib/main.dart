@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'weather_screen/weather_screen.dart';
-import 'weather_screen/weather_screen_bloc.dart';
+import 'package:lib_weather_screen/weather_screen.dart';
+import 'package:lib_weather_screen/weather_screen_bloc.dart';
+
+
 // import 'package:lib_location/location.dart';
 
 // ##DOC:
@@ -23,13 +25,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: WeatherScreen(
         bloc: WeatherScreenBLoC(), 
-        style: WeatherScreenStyle(
-          snackBarStyle: SnackBarStyle(
-            textStyle: TextStyle(color: Color(0xffffffff)), 
-            color: Color(0xff424242)
-          )
+          style: WeatherScreenStyle(
+            snackBarStyle: SnackBarStyle(
+              textStyle: TextStyle(color: Color(0xffffffff)), 
+              color: Color(0xff424242)
+            )
+          ),
         ),
-      ),
-    );
+      );
   }
 }

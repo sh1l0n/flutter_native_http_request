@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
 import 'package:lib_location/location.dart';
-import 'package:native_wheater/weather_screen/weather_api.dart';
+import 'file:///home/snuil1/Documents/challenges/native_wheater/libs/lib_weather_screen/lib/weather_api.dart';
 
 class WeatherCityInfo {
   const WeatherCityInfo(this.city, this.weather);

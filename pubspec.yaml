@@ -12,12 +12,8 @@ dependencies:
 
   cupertino_icons: ^1.0.2
 
-  http_request:
-    path: ./libs/http_request
-
-  lib_location:
-    path: ./libs/lib_location
-
+  lib_weather_screen:
+    path: ./libs/lib_weather_screen
 
 dev_dependencies:
   flutter_test:
