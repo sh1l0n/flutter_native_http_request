@@ -37,6 +37,14 @@ class _WeatherApp extends StatelessWidget {
     return WeatherScreen(
       bloc: WeatherScreenBLoC(), 
       style: WeatherScreenStyle(
+        appBar: AppBarStyle(
+          color: Color(0xff424242), 
+          textStyle: TextStyle(
+            color: Color(0xffefefef),
+            fontWeight: FontWeight.w700
+          ), 
+          height: 50
+        ),
         snackBarStyle: SnackBarStyle(
           textStyle: TextStyle(
             color: Color(0xffffffff),

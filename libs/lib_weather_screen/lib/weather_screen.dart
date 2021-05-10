@@ -17,15 +17,29 @@ class SnackBarStyle {
   final Color color;
 }
 
+class AppBarStyle {
+  const AppBarStyle({
+    required this.color, 
+    required this.textStyle, 
+    required this.height
+  });
+
+  final Color color;
+  final TextStyle textStyle;
+  final double height;
+}
+
 class WeatherScreenStyle {
   const WeatherScreenStyle({
     required this.snackBarStyle,
+    required this.appBar,
     required this.header,
     required this.card,
     required this.noLocationSelectedTextStyle,
     required this.separatorColor,
   });
   final SnackBarStyle snackBarStyle;
+  final AppBarStyle appBar;
   final TextStyle noLocationSelectedTextStyle;
   final Color separatorColor;
   final WeatherHeaderStyle header;
@@ -107,8 +121,15 @@ class WeatherScreen extends StatelessWidget {
       _buildSnackbar(context, message);
     });
     return Scaffold(
-        appBar: AppBar(
-        title: const Text('Flutter weather'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(style.appBar.height),
+        child: AppBar(
+          backgroundColor: style.appBar.color,
+          title: Text(
+            'Flutter Weather',
+            style: style.appBar.textStyle,
+          ),
+        ), 
       ),
       resizeToAvoidBottomInset: false,
       body: StreamBuilder(
