@@ -12,23 +12,11 @@ import 'package:http_request/http_request.dart';
 import 'package:lib_location/location.dart';
 
 import 'weather_api.dart';
+import 'weather_city_info.dart';
 
-class WeatherCityInfo {
-  const WeatherCityInfo(this.city, this.weather);
-  final CityInfo? city;
-  final OneCallResponse weather;  
-
-  @override
-  String toString() => toJson().toString();
-
-  Map<String, dynamic> toJson() => {
-    'city': city,
-    'weather': weather,
-  };
-}
 
 class WeatherScreenBLoC {
-  StreamController<String> _messageToClientController = StreamController<String>.broadcast();
+  final StreamController<String> _messageToClientController = StreamController<String>.broadcast();
   Stream<String> get messageToClientStream => _messageToClientController.stream;
   Sink<String> get _messageToClientSink => _messageToClientController.sink;
 

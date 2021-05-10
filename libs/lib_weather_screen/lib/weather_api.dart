@@ -35,7 +35,7 @@ class OneCallResponseEntry {
 
   static OneCallResponseEntry fromJson(final Map<String, dynamic> data) {
     final dt = data['dt'] as int;
-    late double temp = 0.0;
+    late var temp = 0.0;
     if (data['temp'] is Map<String, dynamic>) {
       temp = data['temp']['day'] as double;
     } else {
