@@ -166,6 +166,23 @@ class WeatherHeader extends StatelessWidget {
     );
   }
 
+  Widget _buildCityPath() {
+    return Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: style.legendPadding,
+        child: Text(
+          _getCityFullPath(),
+          textAlign: TextAlign.center,
+          style: style.legendStyle,
+
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -188,6 +205,8 @@ class WeatherHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildTemp(context),
+                Container(height: style.separationCityTemp*0.25),
+                _buildCityPath(),
                 Container(height: style.separationCityTemp),
                 Padding(
                   padding: style.textFieldPadding,
@@ -207,20 +226,6 @@ class WeatherHeader extends StatelessWidget {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: style.legendPadding,
-              child: Text(
-                _getCityFullPath(),
-                textAlign: TextAlign.center,
-                style: style.legendStyle,
-    
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-              ),
-            )
-          )
         ],
       ),
     );
