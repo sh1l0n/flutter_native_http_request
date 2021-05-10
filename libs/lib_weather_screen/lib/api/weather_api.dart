@@ -99,3 +99,7 @@ class OneCallResponse {
     return OneCallResponse(latitude, longitude, timezone, entries);
   } 
 }
+
+String createImageUrl(final String imageId) {
+  return 'https://openweathermap.org/img/w/${imageId}.png';
+}

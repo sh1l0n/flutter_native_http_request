@@ -70,7 +70,7 @@ class WeatherDayCard extends StatelessWidget {
             children: [
               Center(
                 child: Image.network(
-                  'https://openweathermap.org/img/w/${weather.icon}.png',
+                  createImageUrl(weather.icon),
                 ),
               ),
               Container(width: style.separationIconInfo),

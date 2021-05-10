@@ -23,9 +23,11 @@ class WeatherScreenStyle {
     required this.header,
     required this.card,
     required this.noLocationSelectedTextStyle,
+    required this.separatorColor,
   });
   final SnackBarStyle snackBarStyle;
   final TextStyle noLocationSelectedTextStyle;
+  final Color separatorColor;
   final WeatherHeaderStyle header;
   final WeatherDayCardStyle card;
 }
@@ -90,6 +92,7 @@ class WeatherScreen extends StatelessWidget {
           flex: 4,
           child: _buildHeader(context, cityInfo),
         ),
+        Container(height: 1, color: style.separatorColor),
         Expanded(
           flex: 6,
           child: _buildWeekInfo(context, cityInfo),
@@ -107,6 +110,7 @@ class WeatherScreen extends StatelessWidget {
         appBar: AppBar(
         title: const Text('Flutter weather'),
       ),
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder(
         initialData: null,
         stream: bloc.updateWeatherStream,

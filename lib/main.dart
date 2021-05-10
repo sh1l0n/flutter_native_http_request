@@ -4,7 +4,6 @@
 // Licensed by GPLv3
 //
 
-
 import 'package:flutter/material.dart';
 
 import 'package:lib_weather_screen/header/weather_header.dart';
@@ -13,32 +12,26 @@ import 'package:lib_weather_screen/weather_screen.dart';
 import 'package:lib_weather_screen/weather_screen_bloc.dart';
 
 
-// import 'package:lib_location/location.dart';
-
 // ##DOC:
-//https://pub.dev/packages/weather_widget
 // ##Developing native pkg:
 // https://github.com/flutter/flutter/issues/19830
 // For running comment the flutter.jar import in build.gradle, but for editing be sure that its uncommented
 
-
-
 void main() {
-  runApp(_AppHelper());
+  runApp(WeatherApp());
 }
 
 // Trick for make context available inside MaterialApp and be able to edit styles
-class _AppHelper extends StatelessWidget {
+class WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: _MyApp(),
+      home: _WeatherApp(),
     );
   }
 }
 
-class _MyApp extends StatelessWidget {
-
+class _WeatherApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WeatherScreen(
@@ -50,37 +43,41 @@ class _MyApp extends StatelessWidget {
           ), 
           color: Color(0xff424242),
         ),
+        separatorColor: Color(0xff242424),
         noLocationSelectedTextStyle: TextStyle(
           fontSize: 18,
           color: Color(0xff242424),
           fontWeight: FontWeight.w600,
         ),
         header: WeatherHeaderStyle(
+          transparentLayerColor: Color(0x55424242),
           size: Size(
             MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height*0.4,
           ),
           cityTextStyle: TextStyle(
             fontSize: 25,
+            color: Color(0xffefefef),
             fontWeight: FontWeight.w500,
           ),
           tempTextStyle: TextStyle(
             fontSize: 40,
+            color: Color(0xffefefef),
             fontWeight: FontWeight.w900,
           ),
           useMyLocationTextStyle: TextStyle(
             fontSize: 20,
-            color: Color(0xff242424),
+            color: Color(0xffefefef),
             fontWeight: FontWeight.w700,
+            decoration:TextDecoration.underline,
           ),
           separationCityTemp: 5,
-          textFieldFillColor: Color(0x33424242),
+          textFieldFillColor: Color(0x22424242),
           cursorColor: Color(0xff424242),
           textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
           legendStyle: TextStyle(
             fontSize: 16, 
             color: Color(0xffffffff),
-            backgroundColor: Color(0x66424242),
             fontWeight: FontWeight.w600,
           ),
           legendPadding: EdgeInsets.only(bottom: 3),
@@ -102,7 +99,6 @@ class _MyApp extends StatelessWidget {
             fontSize: 20,
             color: Color(0xffefefef),
             fontWeight: FontWeight.w900,
-            
           ),
         ),
       ),

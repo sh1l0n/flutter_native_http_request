@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
+import 'package:lib_weather_screen/api/weather_api.dart';
 
 import 'weather_header_bloc.dart';
 import '../api/weather_city_info.dart';
@@ -22,6 +23,7 @@ class WeatherHeaderStyle {
     required this.useMyLocationTextStyle,
     required this.legendStyle,
     required this.legendPadding,
+    required this.transparentLayerColor,
   });
   final Size size;
   final TextStyle tempTextStyle;
@@ -30,6 +32,9 @@ class WeatherHeaderStyle {
   final Color textFieldFillColor;
   final Color cursorColor;
   final EdgeInsets textFieldPadding;
+  // ##TODO: This attribute is a colored layer over the weather background in order to make text more visible
+  // the cards is also using it. It needs a refactoring process for unifying that configuration.
+  final Color transparentLayerColor;
   final TextStyle useMyLocationTextStyle;
   final TextStyle legendStyle;
   final EdgeInsets legendPadding;
@@ -105,6 +110,7 @@ class WeatherHeader extends StatelessWidget {
         ),
         hintText: 'Enter a location',
       ),
+      textAlign: TextAlign.center,
       style: style.cityTextStyle,
       cursorColor: style.cursorColor, 
       onSubmitted: onSubmitted,
@@ -137,6 +143,29 @@ class WeatherHeader extends StatelessWidget {
     return res;
   }
 
+  Widget _buildTemp(final BuildContext context) {
+    if (cityInfo==null) {
+      return Text('');
+    } 
+
+    final icon = cityInfo?.weather.entries[1].icon;
+    final temp = Text(
+      '${cityInfo?.weather.entries.first.temp.toInt()}°C',
+      style: style.tempTextStyle,
+    );
+
+    if (icon==null) {
+      return Center(child: temp);
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        temp,
+        Image.network(createImageUrl(icon),),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -149,14 +178,16 @@ class WeatherHeader extends StatelessWidget {
             width: style.size.width, 
             height: style.size.height
           ),
+          Container(
+            width: style.size.width, 
+            height: style.size.height,
+            color: style.transparentLayerColor,
+          ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp.toInt()}°C' : ''),
-                  style: style.tempTextStyle,
-                ),
+                _buildTemp(context),
                 Container(height: style.separationCityTemp),
                 Padding(
                   padding: style.textFieldPadding,
