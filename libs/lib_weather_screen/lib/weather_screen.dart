@@ -91,6 +91,12 @@ class WeatherScreen extends StatelessWidget {
         textFieldFillColor: Color(0x33424242),
         cursorColor: Color(0xff424242),
         textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
+        legendStyle: TextStyle(
+          fontSize: 16, 
+          color: Color(0xffffffff),
+          backgroundColor: Color(0x66424242),
+        ),
+        legendPadding: EdgeInsets.only(bottom: 3),
       ),
       onSubmitted: (final String value) {
         bloc.getWeatherFromAddress(value);

@@ -1,6 +1,10 @@
+//
+// Created by @sh1l0n
+//
+// Licensed by GPLv3
+//
 
 import 'package:flutter/cupertino.dart';
-import 'package:lib_weather_screen/weather_city_info.dart';
 
 class WeatherHeaderBLoC {
   WeatherHeaderBLoC() {
@@ -13,13 +17,15 @@ class WeatherHeaderBLoC {
   late String _text = ''; 
 
   void _textFieldListener() {
-    print("listener: ${editingController.text}");
     _text = editingController.text;
-    print("bloc.texttexttext; ${_text}");
   }
 
   void dispose() {
     editingController.removeListener(_textFieldListener);
     editingController.dispose();
+  }
+
+  void cleanTextField() {
+    editingController.clear();
   }
 }
