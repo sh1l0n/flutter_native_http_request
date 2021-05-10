@@ -5,11 +5,13 @@
 //
 
 import 'package:flutter/material.dart';
-import 'package:lib_weather_screen/header/weather_header_bloc.dart';
-import 'package:lib_weather_screen/weather_city_info.dart';
-import 'header/weather_header.dart';
-import 'weather_screen_bloc.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
+import 'package:lib_weather_screen/common.dart';
+
+import 'weather_city_info.dart';
+import 'header/weather_header.dart';
+import 'weather_day_card.dart';
+import 'weather_screen_bloc.dart';
 
 class SnackBarStyle {
   const SnackBarStyle({required this.textStyle, required this.color});
@@ -18,8 +20,14 @@ class SnackBarStyle {
 }
 
 class WeatherScreenStyle {
-  const WeatherScreenStyle({required this.snackBarStyle});
+  const WeatherScreenStyle({
+    required this.snackBarStyle,
+    required this.header,
+    required this.card,
+  });
   final SnackBarStyle snackBarStyle;
+  final WeatherHeaderStyle header;
+  final WeatherDayCardStyle card;
 }
 
 class WeatherScreen extends StatelessWidget {
@@ -35,69 +43,11 @@ class WeatherScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  WeatherType _weatherIdToType(final int id) {
-    if (id>=200 && id<=232) { // Tunderstorm
-      return WeatherType.thunder;
-    } else if (id>=300 && id<=321) { // Drizzle
-      return WeatherType.lightRainy;
-    } else if (id>=500 && id<=531) { // Rain
-      if (id<=501) {
-        return WeatherType.lightRainy;
-      } else if (id<=511) {
-        return WeatherType.middleRainy;
-      } else {
-        return WeatherType.heavyRainy;
-      }
-    } else if (id>=600 && id<=622) { // Snow
-      if (id<=601) {
-        return WeatherType.lightSnow;
-      } else if (id<=612) {
-        return WeatherType.middleSnow;
-      } else {
-        return WeatherType.heavySnow;
-      }
-    } else if (id>=701 && id<=781) { // Athmosfere
-      if (id<=721) {
-        return WeatherType.hazy;
-      } else if (id==741) {
-        return WeatherType.foggy;
-      } else {
-        return WeatherType.dusty;
-      }
-    } else if (id==800) { // Clear
-      return WeatherType.sunny;
-    } else if (id>=801 && id<=804) { // Clouds|
-      return WeatherType.cloudy;
-    }
-    return WeatherType.sunny;
-  }
-
   Widget _buildHeader(final BuildContext context, final WeatherCityInfo? cityInfo) {
     return WeatherHeader(
       bloc: bloc.header,
       cityInfo: cityInfo,
-      style: WeatherHeaderStyle(
-        size: Size(
-          MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height*0.4,
-        ),
-        cityTextStyle: TextStyle(fontSize: 25),
-        tempTextStyle: TextStyle(fontSize: 40),
-        useMyLocationTextStyle: TextStyle(
-          fontSize: 20,
-          color: Color(0xff242424),
-        ),
-        separationCityTemp: 5,
-        textFieldFillColor: Color(0x33424242),
-        cursorColor: Color(0xff424242),
-        textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
-        legendStyle: TextStyle(
-          fontSize: 16, 
-          color: Color(0xffffffff),
-          backgroundColor: Color(0x66424242),
-        ),
-        legendPadding: EdgeInsets.only(bottom: 3),
-      ),
+      style: style.header,
       onSubmitted: (final String value) {
         bloc.getWeatherFromAddress(value);
       },
@@ -109,14 +59,23 @@ class WeatherScreen extends StatelessWidget {
 
   Widget _buildWeekInfo(final BuildContext context, final WeatherCityInfo? cityInfo) {
     final itemExtent = MediaQuery.of(context).size.height*0.15;
+
+    if (cityInfo==null) {
+      return Center(
+        child: Text(
+          'No location selected',
+        ),
+      );
+    }
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
       itemExtent: itemExtent,
       itemBuilder: (final BuildContext context, final int index) {
-        return WeatherBg(
-          weatherType: WeatherType.heavySnow, 
-          width: MediaQuery.of(context).size.width, 
-          height: itemExtent,
+        final entry = cityInfo.weather.entries[index+1];
+        return WeatherDayCard(
+          weather: entry,
+          style: style.card,
         );
       },
       itemCount: 6,

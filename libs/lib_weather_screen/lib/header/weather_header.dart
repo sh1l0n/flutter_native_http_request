@@ -154,7 +154,7 @@ class WeatherHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp.toInt()}  °C' : ''),
+                  (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp.toInt()}°C' : ''),
                   style: style.tempTextStyle,
                 ),
                 Container(height: style.separationCityTemp),
