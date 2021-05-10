@@ -79,7 +79,7 @@ class WeatherScreen extends StatelessWidget {
       style: WeatherHeaderStyle(
         size: Size(
           MediaQuery.of(context).size.width,
-          MediaQuery.of(context).size.height*0.35,
+          MediaQuery.of(context).size.height*0.4,
         ),
         cityTextStyle: TextStyle(fontSize: 25),
         tempTextStyle: TextStyle(fontSize: 40),
@@ -107,10 +107,33 @@ class WeatherScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildWeekInfo(final BuildContext context, final WeatherCityInfo? cityInfo) {
+    final itemExtent = MediaQuery.of(context).size.height*0.15;
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      itemExtent: itemExtent,
+      itemBuilder: (final BuildContext context, final int index) {
+        return WeatherBg(
+          weatherType: WeatherType.heavySnow, 
+          width: MediaQuery.of(context).size.width, 
+          height: itemExtent,
+        );
+      },
+      itemCount: 6,
+    );
+  }
+
   Widget _buildContent(final BuildContext context, final WeatherCityInfo? cityInfo) {
     return Column(
       children: [
-        _buildHeader(context, cityInfo),
+        Expanded(
+          flex: 4,
+          child: _buildHeader(context, cityInfo),
+        ),
+        Expanded(
+          flex: 6,
+          child: _buildWeekInfo(context, cityInfo),
+        ),
       ],
     );
   }
