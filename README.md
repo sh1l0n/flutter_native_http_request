@@ -23,4 +23,4 @@ chmod +x update.sh
 ```
 
 4. Put you OpenWeather api key inside assets/env.json file
-5. Compile & Run :)
+5. Compile on an Android device and enjoy :)
