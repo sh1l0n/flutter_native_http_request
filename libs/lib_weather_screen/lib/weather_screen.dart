@@ -5,10 +5,8 @@
 //
 
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
-import 'package:lib_weather_screen/common.dart';
 
-import 'weather_city_info.dart';
+import 'api/weather_city_info.dart';
 import 'header/weather_header.dart';
 import 'weather_day_card.dart';
 import 'weather_screen_bloc.dart';

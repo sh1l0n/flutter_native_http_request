@@ -7,8 +7,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 
-import 'common.dart';
-import 'weather_api.dart';
+import 'api/common.dart';
+import 'api/weather_api.dart';
 
 class WeatherDayCardStyle {
   const  WeatherDayCardStyle({

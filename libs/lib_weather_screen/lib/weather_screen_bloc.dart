@@ -12,8 +12,8 @@ import 'package:http_request/http_request.dart';
 import 'package:lib_location/location.dart';
 
 import 'header/weather_header_bloc.dart';
-import 'weather_api.dart';
-import 'weather_city_info.dart';
+import 'api/weather_api.dart';
+import 'api/weather_city_info.dart';
 
 
 class WeatherScreenBLoC {

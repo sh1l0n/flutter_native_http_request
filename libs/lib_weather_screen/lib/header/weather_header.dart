@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 
 import 'weather_header_bloc.dart';
-import '../weather_city_info.dart';
+import '../api/weather_city_info.dart';
 
 class WeatherHeaderStyle {
   WeatherHeaderStyle({
