@@ -22,8 +22,10 @@ class WeatherScreenStyle {
     required this.snackBarStyle,
     required this.header,
     required this.card,
+    required this.noLocationSelectedTextStyle,
   });
   final SnackBarStyle snackBarStyle;
+  final TextStyle noLocationSelectedTextStyle;
   final WeatherHeaderStyle header;
   final WeatherDayCardStyle card;
 }
@@ -62,6 +64,7 @@ class WeatherScreen extends StatelessWidget {
       return Center(
         child: Text(
           'No location selected',
+          style: style.noLocationSelectedTextStyle,
         ),
       );
     }
@@ -70,13 +73,13 @@ class WeatherScreen extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemExtent: itemExtent,
       itemBuilder: (final BuildContext context, final int index) {
-        final entry = cityInfo.weather.entries[index+1];
+        final entry = cityInfo.weather.entries[index+2];
         return WeatherDayCard(
           weather: entry,
           style: style.card,
         );
       },
-      itemCount: 6,
+      itemCount: cityInfo.weather.entries.length-2,
     );
   }
 

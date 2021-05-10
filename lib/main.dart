@@ -50,16 +50,28 @@ class _MyApp extends StatelessWidget {
           ), 
           color: Color(0xff424242),
         ),
+        noLocationSelectedTextStyle: TextStyle(
+          fontSize: 18,
+          color: Color(0xff242424),
+          fontWeight: FontWeight.w600,
+        ),
         header: WeatherHeaderStyle(
           size: Size(
             MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height*0.4,
           ),
-          cityTextStyle: TextStyle(fontSize: 25),
-          tempTextStyle: TextStyle(fontSize: 40),
+          cityTextStyle: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w500,
+          ),
+          tempTextStyle: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.w900,
+          ),
           useMyLocationTextStyle: TextStyle(
             fontSize: 20,
             color: Color(0xff242424),
+            fontWeight: FontWeight.w700,
           ),
           separationCityTemp: 5,
           textFieldFillColor: Color(0x33424242),
@@ -69,6 +81,7 @@ class _MyApp extends StatelessWidget {
             fontSize: 16, 
             color: Color(0xffffffff),
             backgroundColor: Color(0x66424242),
+            fontWeight: FontWeight.w600,
           ),
           legendPadding: EdgeInsets.only(bottom: 3),
         ), 
@@ -76,7 +89,21 @@ class _MyApp extends StatelessWidget {
           size: Size(
             MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height*0.15,
-          )
+          ),
+          transparentLayerColor: Color(0x88424242),
+          separationIconInfo: 5,
+          separationTempRight: 5,
+          dateTextStyle: TextStyle(
+            fontSize: 20,
+            color: Color(0xffefefef),
+            fontWeight: FontWeight.w900,
+          ),
+          tempTextStyle: TextStyle(
+            fontSize: 20,
+            color: Color(0xffefefef),
+            fontWeight: FontWeight.w900,
+            
+          ),
         ),
       ),
     );
