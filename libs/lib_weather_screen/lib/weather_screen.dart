@@ -6,6 +6,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lib_weather_screen/header/weather_header_bloc.dart';
+import 'package:lib_weather_screen/weather_city_info.dart';
 import 'header/weather_header.dart';
 import 'weather_screen_bloc.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
@@ -71,6 +72,43 @@ class WeatherScreen extends StatelessWidget {
     return WeatherType.sunny;
   }
 
+  Widget _buildHeader(final BuildContext context, final WeatherCityInfo? cityInfo) {
+    return WeatherHeader(
+      bloc: bloc.header,
+      cityInfo: cityInfo,
+      style: WeatherHeaderStyle(
+        size: Size(
+          MediaQuery.of(context).size.width,
+          MediaQuery.of(context).size.height*0.35,
+        ),
+        cityTextStyle: TextStyle(fontSize: 25),
+        tempTextStyle: TextStyle(fontSize: 40),
+        useMyLocationTextStyle: TextStyle(
+          fontSize: 20,
+          color: Color(0xff242424),
+        ),
+        separationCityTemp: 5,
+        textFieldFillColor: Color(0x33424242),
+        cursorColor: Color(0xff424242),
+        textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
+      ),
+      onSubmitted: (final String value) {
+        bloc.getWeatherFromAddress(value);
+      },
+      didUseMyLocationPressed: () {
+        bloc.getWeatherCurrentLocation();
+      },
+    );
+  }
+
+  Widget _buildContent(final BuildContext context, final WeatherCityInfo? cityInfo) {
+    return Column(
+      children: [
+        _buildHeader(context, cityInfo),
+      ],
+    );
+  }
+
   @override
   Widget build(final BuildContext context) {
     bloc.messageToClientStream.listen((message) {
@@ -80,40 +118,13 @@ class WeatherScreen extends StatelessWidget {
         appBar: AppBar(
         title: const Text('Flutter weather'),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            WeatherHeader(
-              bloc: bloc.header,
-              style: WeatherHeaderStyle(
-                size: Size(
-                  MediaQuery.of(context).size.width,
-                  MediaQuery.of(context).size.height*0.35,
-                ),
-                cityTextStyle: TextStyle(fontSize: 25),
-                tempTextStyle: TextStyle(fontSize: 40),
-                useMyLocationTextStyle: TextStyle(
-                  fontSize: 20,
-                  color: Color(0xff242424),
-                ),
-                separationCityTemp: 5,
-                textFieldFillColor: Color(0x33424242),
-                cursorColor: Color(0xff424242),
-                textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
-              ),
-              onSubmitted: (final String value) {
-                bloc.getWeatherFromAddress(value).then((value) {
-                  print(value);
-                });
-              },
-              didUseMyLocationPressed: () {
-                bloc.getWeatherCurrentLocation().then((value) {
-                  print(value);
-                });
-              },
-            ),
-          ],
-        ),
+      body: StreamBuilder(
+        initialData: null,
+        stream: bloc.updateWeatherStream,
+        builder: (final BuildContext context, final AsyncSnapshot<WeatherCityInfo?> snp) {
+          final data = snp.data;
+          return _buildContent(context, data);
+        }
       ),
     );
   }

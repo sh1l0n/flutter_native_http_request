@@ -8,9 +8,9 @@ class OneCallResponseEntry {
   const OneCallResponseEntry(this.dt, this.temp, this.pressure, this.humidity, this.clouds, this.windSpeed, this.weatherId, this.title, this.description, this.icon);
   final int dt;
   final double temp;
-  final int pressure;
-  final int humidity;
-  final int clouds;
+  final double pressure;
+  final double humidity;
+  final double clouds;
   final double windSpeed;
   final int weatherId;
   final String title;
@@ -33,26 +33,29 @@ class OneCallResponseEntry {
     'icon': icon
   };
 
+  static double _parseNumberValue(final dynamic value) {
+    var parsed = 0.0;
+    try {
+      parsed = value as double;
+    } catch (e) {
+      parsed = (value as int).toDouble();  
+    }
+    return parsed;
+  }
+
   static OneCallResponseEntry fromJson(final Map<String, dynamic> data) {
     final dt = data['dt'] as int;
     late var temp = 0.0;
     if (data['temp'] is Map<String, dynamic>) {
-      try {
-        temp = data['temp']['day'] as double;
-      } catch (e) {
-        temp = (data['temp']['day'] as int).toDouble();  
-      }
+      temp = _parseNumberValue(data['temp']['day']);
     } else {
-      try {
-        temp = data['temp'] as double;
-      } catch(e) {
-        temp = (data['temp'] as int).toDouble();
-      }
+      temp = _parseNumberValue(data['temp']);
     }
-    final pressure = data['pressure'] as int;
-    final humidity = data['humidity'] as int;
-    final clouds = data['clouds'] as int;
-    final windSpeed = (data['wind_speed'] as int).toDouble();
+
+    final pressure = _parseNumberValue(data['pressure']);
+    final humidity = _parseNumberValue(data['humidity']);
+    final clouds = _parseNumberValue(data['clouds']);
+    final windSpeed = _parseNumberValue(data['wind_speed']);
     final weather = data['weather'] as List<dynamic>;
     final weatherId = weather[0]['id'] as int;
     final title = weather[0]['main'] as String;

@@ -21,6 +21,11 @@ class WeatherScreenBLoC {
   Stream<String> get messageToClientStream => _messageToClientController.stream;
   Sink<String> get _messageToClientSink => _messageToClientController.sink;
 
+  final StreamController<WeatherCityInfo?> _updateWeatherController = StreamController<WeatherCityInfo?>.broadcast();
+  Stream<WeatherCityInfo?> get updateWeatherStream => _updateWeatherController.stream;
+  Sink<WeatherCityInfo?> get _updateWeatherSink => _updateWeatherController.sink;
+
+
   final header = WeatherHeaderBLoC();
 
   Future<String> _getApiKey() async {
@@ -36,17 +41,25 @@ class WeatherScreenBLoC {
     }
   }
 
-  Future<WeatherCityInfo?> getWeatherFromAddress(final String address) async {
+  Future<void> getWeatherFromAddress(final String address) async {
     final city = await LocationManager.getCityFromAddress(address);
     if (city==null) {
       _sendMessageToClient('Location not found');
     }
-    return city!=null ? _getWeatherIn(city) : null;
+    final data = city!=null ? await _getWeatherIn(city) : null;
+    _updateWeatherUI(data);
   }
 
-  Future<WeatherCityInfo?> getWeatherCurrentLocation() async {
+  void _updateWeatherUI(final WeatherCityInfo? weather) {
+    if (weather!=null && !_updateWeatherController.isClosed && _updateWeatherController.hasListener) {
+      _updateWeatherSink.add(weather);
+    }
+  }
+
+  Future<void> getWeatherCurrentLocation() async {
     final city = await requestCurrentLocation();
-    return city!=null ? await _getWeatherIn(city) : null;
+    final data = city!=null ? await _getWeatherIn(city) : null;
+    _updateWeatherUI(data);
   }
 
   Future<String> getIcon(final String icon) async {
@@ -103,6 +116,7 @@ class WeatherScreenBLoC {
 
   void dispose() {
     _messageToClientController.close();
+    _updateWeatherController.close();
   }
 
 }
