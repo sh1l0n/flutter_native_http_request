@@ -104,7 +104,18 @@ class WeatherScreen extends StatelessWidget {
                   MediaQuery.of(context).size.width,
                   MediaQuery.of(context).size.height*0.35,
                 ),
+                cityTextStyle: TextStyle(fontSize: 25),
+                tempTextStyle: TextStyle(fontSize: 40),
+                separationCityTemp: 5,
+                textFieldFillColor: Color(0x33424242),
+                cursorColor: Color(0xff424242),
+                textFieldPadding: EdgeInsets.symmetric(horizontal: 5),
               ),
+              onSubmitted: (final String value) {
+                bloc.getWeatherFromAddress(value).then((value) {
+                  print(value);
+                });
+              }
             ),
           ],
         ),

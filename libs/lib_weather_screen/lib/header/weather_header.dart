@@ -3,26 +3,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:lib_weather_screen/header/weather_header_bloc.dart';
 
+import '../weather_city_info.dart';
+
 
 class WeatherHeaderStyle {
   WeatherHeaderStyle({
-    required this.size
+    required this.size,
+    required this.tempTextStyle,
+    required this.cityTextStyle,
+    required this.separationCityTemp,
+    required this.textFieldFillColor,
+    required this.cursorColor,
+    required this.textFieldPadding,
   });
   final Size size;
+  final TextStyle tempTextStyle;
+  final TextStyle cityTextStyle;
+  final double separationCityTemp;
+  final Color textFieldFillColor;
+  final Color cursorColor;
+  final EdgeInsets textFieldPadding;
 }
-
 
 class WeatherHeader extends StatelessWidget {
   const WeatherHeader({
     Key? key, 
     required this.style, 
-    required this.bloc
+    required this.bloc,
+    required this.onSubmitted,
+    this.cityInfo,
   }) : super(key: key);
 
   final WeatherHeaderStyle style;
   final WeatherHeaderBLoC bloc;
+  final WeatherCityInfo? cityInfo;
+  final Function(String) onSubmitted;
 
-    WeatherType _weatherIdToType(final int id) {
+  WeatherType _weatherIdToType(final int id) {
     if (id>=200 && id<=232) { // Tunderstorm
       return WeatherType.thunder;
     } else if (id>=300 && id<=321) { // Drizzle
@@ -58,6 +75,28 @@ class WeatherHeader extends StatelessWidget {
     }
     return WeatherType.sunny;
   }
+
+  Widget _buildTextField(final BuildContext context) {
+    return TextField(
+      controller: bloc.editingController, 
+      focusNode: FocusNode(), 
+      decoration: InputDecoration(
+        fillColor: style.textFieldFillColor,
+        filled: true,
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(
+            width: 1,
+            style: BorderStyle.solid
+          )
+        ),
+        hintText: 'Enter a location',
+      ),
+      style: style.cityTextStyle,
+      cursorColor: style.cursorColor, 
+      onSubmitted: onSubmitted,
+    );
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -67,10 +106,26 @@ class WeatherHeader extends StatelessWidget {
       child: Stack(
         children: [
           WeatherBg(
-            weatherType: _weatherIdToType(bloc.cityInfo?.weather.entries.first.weatherId ?? 0), 
+            weatherType: _weatherIdToType(cityInfo?.weather.entries.first.weatherId ?? 0), 
             width: style.size.width, 
             height: style.size.height
           ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                  Text(
+                    (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp}' : '?') + ' °C', 
+                    style: style.tempTextStyle,
+                  ),
+                  Container(height: style.separationCityTemp),
+                  Padding(
+                    padding: style.textFieldPadding,
+                    child: _buildTextField(context),
+                  )
+              ],
+            ),
+          )
         ],
       ),
     );

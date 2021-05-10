@@ -113,8 +113,12 @@ class LocationManager {
     );
   }
 
-  static Future<CityInfo> getCityFromAddress(final String address) async {
-    final location = (await geocoding.locationFromAddress(address)).first;
-    return getCityFromCoordinates(location.latitude, location.longitude);
+  static Future<CityInfo?> getCityFromAddress(final String address) async {
+    try {
+      final location = (await geocoding.locationFromAddress(address)).first;
+      return getCityFromCoordinates(location.latitude, location.longitude);
+    } catch (e) {
+      return null;
+    }
   }
 }

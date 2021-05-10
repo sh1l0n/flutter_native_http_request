@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:http_request/http_request.dart';
 import 'package:lib_location/location.dart';
 
+import 'header/weather_header_bloc.dart';
 import 'weather_api.dart';
 import 'weather_city_info.dart';
 
@@ -19,6 +20,8 @@ class WeatherScreenBLoC {
   final StreamController<String> _messageToClientController = StreamController<String>.broadcast();
   Stream<String> get messageToClientStream => _messageToClientController.stream;
   Sink<String> get _messageToClientSink => _messageToClientController.sink;
+
+  final header = WeatherHeaderBLoC();
 
   Future<String> _getApiKey() async {
     final jsonData = await rootBundle.loadString('assets/env.json');
@@ -35,7 +38,10 @@ class WeatherScreenBLoC {
 
   Future<WeatherCityInfo?> getWeatherFromAddress(final String address) async {
     final city = await LocationManager.getCityFromAddress(address);
-    return _getWeatherIn(city);
+    if (city==null) {
+      _sendMessageToClient('Location not found');
+    }
+    return city!=null ? _getWeatherIn(city) : null;
   }
 
   Future<WeatherCityInfo?> getWeatherCurrentLocation() async {
