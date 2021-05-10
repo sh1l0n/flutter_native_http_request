@@ -12,6 +12,10 @@ In order to run the app, you need to follow the next steps
 1. Install [Flutter SDK](https://flutter.dev/docs/get-started/install)
 
 2. Clone and navigate to project root folder
+```
+git clone git@github.com:sh1l0n/flutter_native_httprequest.git
+cd flutter_native_httprequest/
+```
 3. Get flutter packages
 ```
 chmod +x update.sh
