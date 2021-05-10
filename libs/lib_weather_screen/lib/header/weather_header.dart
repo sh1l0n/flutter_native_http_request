@@ -15,6 +15,7 @@ class WeatherHeaderStyle {
     required this.textFieldFillColor,
     required this.cursorColor,
     required this.textFieldPadding,
+    required this.useMyLocationTextStyle,
   });
   final Size size;
   final TextStyle tempTextStyle;
@@ -23,6 +24,7 @@ class WeatherHeaderStyle {
   final Color textFieldFillColor;
   final Color cursorColor;
   final EdgeInsets textFieldPadding;
+  final TextStyle useMyLocationTextStyle;
 }
 
 class WeatherHeader extends StatelessWidget {
@@ -31,6 +33,7 @@ class WeatherHeader extends StatelessWidget {
     required this.style, 
     required this.bloc,
     required this.onSubmitted,
+    required this.didUseMyLocationPressed,
     this.cityInfo,
   }) : super(key: key);
 
@@ -38,6 +41,7 @@ class WeatherHeader extends StatelessWidget {
   final WeatherHeaderBLoC bloc;
   final WeatherCityInfo? cityInfo;
   final Function(String) onSubmitted;
+  final Function() didUseMyLocationPressed;
 
   WeatherType _weatherIdToType(final int id) {
     if (id>=200 && id<=232) { // Tunderstorm
@@ -77,6 +81,9 @@ class WeatherHeader extends StatelessWidget {
   }
 
   Widget _buildTextField(final BuildContext context) {
+    print("bloc.text: ${bloc.text}");
+    bloc.editingController.text = bloc.text;
+  
     return TextField(
       controller: bloc.editingController, 
       focusNode: FocusNode(), 
@@ -114,15 +121,26 @@ class WeatherHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                  Text(
-                    (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp}' : '?') + ' °C', 
-                    style: style.tempTextStyle,
+                Text(
+                  (cityInfo!=null ? '${cityInfo?.weather.entries.first.temp}' : '?') + ' °C', 
+                  style: style.tempTextStyle,
+                ),
+                Container(height: style.separationCityTemp),
+                Padding(
+                  padding: style.textFieldPadding,
+                  child: _buildTextField(context),
+                ),
+                Container(height: style.separationCityTemp),
+                TextButton(
+                  style: ButtonStyle(
+                    enableFeedback: true,
                   ),
-                  Container(height: style.separationCityTemp),
-                  Padding(
-                    padding: style.textFieldPadding,
-                    child: _buildTextField(context),
-                  )
+                  child: Text(
+                    'Use my location',
+                    style: style.useMyLocationTextStyle,
+                  ),
+                  onPressed: didUseMyLocationPressed,
+                ),
               ],
             ),
           )

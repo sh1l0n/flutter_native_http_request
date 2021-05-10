@@ -83,22 +83,8 @@ class WeatherScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            // FloatingActionButton(
-            //   onPressed: () {
-            //     bloc.requestCurrentLocation().then((value) {
-            //       if (value!=null) {
-            //         bloc.getWeatherFromAddress('Alicante').then((value) {
-            //           print(value);
-            //         });
-            //         bloc.getWeatherCurrentLocation().then((value) {
-            //           print(value);
-            //         });
-            //       }
-            //     });
-            //   },
-            // ),
             WeatherHeader(
-              bloc: WeatherHeaderBLoC(),
+              bloc: bloc.header,
               style: WeatherHeaderStyle(
                 size: Size(
                   MediaQuery.of(context).size.width,
@@ -106,6 +92,10 @@ class WeatherScreen extends StatelessWidget {
                 ),
                 cityTextStyle: TextStyle(fontSize: 25),
                 tempTextStyle: TextStyle(fontSize: 40),
+                useMyLocationTextStyle: TextStyle(
+                  fontSize: 20,
+                  color: Color(0xff242424),
+                ),
                 separationCityTemp: 5,
                 textFieldFillColor: Color(0x33424242),
                 cursorColor: Color(0xff424242),
@@ -115,7 +105,12 @@ class WeatherScreen extends StatelessWidget {
                 bloc.getWeatherFromAddress(value).then((value) {
                   print(value);
                 });
-              }
+              },
+              didUseMyLocationPressed: () {
+                bloc.getWeatherCurrentLocation().then((value) {
+                  print(value);
+                });
+              },
             ),
           ],
         ),

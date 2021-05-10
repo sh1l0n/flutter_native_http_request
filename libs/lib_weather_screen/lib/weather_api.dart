@@ -37,14 +37,22 @@ class OneCallResponseEntry {
     final dt = data['dt'] as int;
     late var temp = 0.0;
     if (data['temp'] is Map<String, dynamic>) {
-      temp = data['temp']['day'] as double;
+      try {
+        temp = data['temp']['day'] as double;
+      } catch (e) {
+        temp = (data['temp']['day'] as int).toDouble();  
+      }
     } else {
-      temp = data['temp'] as double;
+      try {
+        temp = data['temp'] as double;
+      } catch(e) {
+        temp = (data['temp'] as int).toDouble();
+      }
     }
     final pressure = data['pressure'] as int;
     final humidity = data['humidity'] as int;
     final clouds = data['clouds'] as int;
-    final windSpeed = data['wind_speed'] as double;
+    final windSpeed = (data['wind_speed'] as int).toDouble();
     final weather = data['weather'] as List<dynamic>;
     final weatherId = weather[0]['id'] as int;
     final title = weather[0]['main'] as String;
