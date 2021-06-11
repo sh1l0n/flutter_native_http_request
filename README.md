@@ -1,5 +1,6 @@
-## native_wheater
-Flutter app for reading weather
+## flutter native http request
+Flutter native http request dependency injection. We could use http_request for any different Flutter project.
+OpenWeather API Request example
 
 <p align="center">
 <img src="doc/weather.jpg" width="45%"/> 
